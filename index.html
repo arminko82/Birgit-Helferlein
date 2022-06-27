@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .row::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        [class*="col-"] {
+            float: left;
+            padding: 15px;
+        }
+
+        html {
+            font-family: "Lucida Sans", sans-serif;
+        }
+
+        .header {
+            background-color: #9933cc;
+            color: #ffffff;
+            padding: 15px;
+            text-align:center;
+        }
+
+        .menu table {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu td {
+            padding: 8px;
+            margin-bottom: 2em;
+            background-color: #33b5e5;
+            color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            text-align: center;
+        }
+
+        .menu td:nth-child(2) {
+            font-size: 20px;
+        }
+
+        .menu td:nth-child(3) {
+            font-size: 40px;
+            font-weight: bold;
+            min-width: 4em;
+        }
+
+
+        .menu td:nth-child(3):hover {
+            background-color: #0099cc;
+        }
+
+        /* For mobile phones: */
+        [class*="col-"] {
+            width: 100%;
+        }
+
+        textarea {
+            padding: 30px;
+        }
+    </style>
+    <script>
+
+        function shuffle(array) {
+            array.sort(() => Math.random() - 0.5);
+            return array;
+        }
+
+        function getRnd(min, max) {
+            return Math.floor(Math.random() * (max - min + 1) ) + min;
+        }
+
+        function combine(syllableValues) {
+            var resultString = "";
+
+            syllableValues = syllableValues.map(block => block.trim().split(/\s+/));
+            const parts = syllableValues.length;
+            var blockIndices = [];
+            for(let i = 0; i < 100; i++) {
+                var keys = Array.from(Array(parts).keys());
+                var indices = shuffle(keys);
+                var singleResult = indices.map(index => {
+                    var blockList = syllableValues[index];
+                    return blockList[getRnd(0, blockList.length - 1)];
+                 }).join("");
+                 resultString += singleResult + " ";
+            }
+            return resultString;
+        }
+
+        function doCombine() {
+            const valuesSyl1 = document.getElementById('syllable-1').value;
+            const valuesSyl2 = document.getElementById('syllable-2').value;
+            const resultContainer = document.getElementById('result');
+
+            const result = combine([valuesSyl1, valuesSyl2]);
+
+            resultContainer.value = result;
+
+        }
+    </script>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Silbenkombinierer</h1>
+    </div>
+
+    <div class="row">
+        <textarea class="inline-boxes" id="syllable-1" placeholder="F&uuml;lle mich" cols="40"  rows="10"></textarea>
+        <textarea class="inline-boxes" id="syllable-2" placeholder="F&uuml;lle mich" cols="40"  rows="10"></textarea>
+    </div>
+    <div class="row">
+        <button onclick="doCombine()" type="button">Kombinieren</button>
+    </div>
+    <div class="row">
+        <textarea class="inline-boxes" id="result" placeholder="Ergebnis ..."  cols="40"  rows="10"></textarea>
+    </div>
+</body>
+</html>
