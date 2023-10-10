@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style type="text/css">
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .row::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        [class*="col-"] {
+            float: left;
+            padding: 15px;
+        }
+
+        html {
+            font-family: "Lucida Sans", sans-serif;
+        }
+
+        .header {
+            background-color: #9933cc;
+            color: #ffffff;
+            padding: 15px;
+            text-align:center;
+        }
+
+        .menu table {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu td {
+            padding: 8px;
+            margin-bottom: 2em;
+            background-color: #33b5e5;
+            color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            text-align: center;
+        }
+
+        .menu td:nth-child(2) {
+            font-size: 20px;
+        }
+
+        .menu td:nth-child(3) {
+            font-size: 40px;
+            font-weight: bold;
+            min-width: 4em;
+        }
+
+
+        .menu td:nth-child(3):hover {
+            background-color: #0099cc;
+        }
+
+        /* For mobile phones: */
+        [class*="col-"] {
+            width: 100%;
+        }
+
+        textarea {
+            padding: 30px;
+        }
+
+        #printBox {
+            border-style: none;
+            resize: none;
+            border-color: transparent;
+        }
+
+        @media not print
+        {
+            .forscreen { display:block; }
+            .forprinting { display:none; }
+        }
+        @media print
+        {
+            .forscreen { display:none; }
+            .forprinting { display:block; }
+        }
+
+    </style>
+    <script>
+        function produce(dirtyInput) {
+            const words = dirtyInput.trim().toUpperCase().split(/\s+/);
+            const result = words.map(word => word.split('').sort(() => 0.5 - Math.random()).join(''));
+            return result.join(" ");
+        }
+
+        function doCombine() {
+            const resultContainer = document.getElementById('result');
+            const result = produce(document.getElementById('syllable-1').value);
+            resultContainer.value = result;
+        }
+
+        function PrintTextareaContent(displayBox, printBox) {
+            document.getElementById(printBox).innerHTML = document.getElementById(displayBox).value;
+        }
+    </script>
+</head>
+
+<body onbeforeprint="PrintTextareaContent('result', 'printBox')">
+    <div class="forscreen">
+        <div class="header">
+            <h1>Buchstaben Shuffle</h1>
+        </div>
+
+        <div class="row">
+            <textarea class="inline-boxes" id="syllable-1" placeholder="F&uuml;lle mich" cols="40"  rows="10"></textarea>
+        </div>
+        <div class="row">
+            <button onclick="doCombine()" type="button">Shuffle</button>
+        </div>
+        <div class="row">
+            <textarea class="inline-boxes" id="result" placeholder="Ergebnis ..."  cols="40"  rows="10"></textarea>
+        </div>
+    </div>
+    <textarea id="printBox" class="forprinting inline-boxes" style="white-space:pre-line;" cols="40"  rows="10"></textarea>
+</body>
+</html>
